@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Voice Assistant</title>
+</head>
+<body>
+    <h2>AI Voice Assistant</h2>
+    <textarea id="userInput" placeholder="Type your question..."></textarea>
+    <button onclick="getResponse()">Ask</button>
+    <audio id="audioPlayer" controls></audio>
+
+    <script>
+        async function getResponse() {
+            let userText = document.getElementById("userInput").value;
+            if (!userText) {
+                alert("Please enter text.");
+                return;
+            }
+
+            // Send text to Gemini AI (Replace with your API key)
+            let geminiApiKey = "AIzaSyAVedCyJvBBIEqGEgno32tP3lbRjtFQODw";
+            let geminiResponse = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" +geminiApiKey, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ contents: [{ parts: [{ text: userText }] }] })
+            });
+
+            let geminiData = await geminiResponse.json();
+            let aiText = geminiData.candidates[0].content.parts[0].text;
+
+            // Convert AI response to speech using free Google TTS URL
+            let googleTTSUrl = https://translate.google.com/translate_tts?ie=UTF-8&tl=en&client=tw-ob&q=${encodeURIComponent(aiText)};
+
+            // Play the generated speech
+            let audioPlayer = document.getElementById("audioPlayer");
+            audioPlayer.src = googleTTSUrl;
+            audioPlayer.play();
+        }
+    </script>
+</body>
+</html>
